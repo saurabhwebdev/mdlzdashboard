@@ -8,7 +8,6 @@ import {
   Button, 
   Space, 
   Divider,
-  Tag,
   Tooltip,
   Row,
   Col,
@@ -16,12 +15,7 @@ import {
 } from 'antd';
 import { 
   PlusOutlined, 
-  EditOutlined, 
-  DeleteOutlined, 
-  InfoCircleOutlined,
-  SwapOutlined, 
-  StopOutlined,
-  CheckCircleOutlined
+  InfoCircleOutlined
 } from '@ant-design/icons';
 
 const { Title, Text, Paragraph } = Typography;

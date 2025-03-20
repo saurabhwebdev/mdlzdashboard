@@ -11,7 +11,6 @@ import {
   Progress, 
   Table, 
   Avatar, 
-  Tooltip, 
   Dropdown, 
   Select,
   Badge,
@@ -22,13 +21,9 @@ import {
   Alert
 } from 'antd';
 import { 
-  UserOutlined, 
   RiseOutlined, 
   FallOutlined, 
-  BarChartOutlined, 
-  DotChartOutlined,
   AreaChartOutlined,
-  CalendarOutlined,
   ReloadOutlined,
   SettingOutlined,
   EllipsisOutlined,
@@ -45,14 +40,10 @@ import {
   Bar, 
   LineChart, 
   Line, 
-  PieChart, 
-  Pie, 
-  Cell,
   XAxis, 
   YAxis, 
   CartesianGrid, 
   Tooltip as RechartsTooltip, 
-  Legend, 
   ResponsiveContainer 
 } from 'recharts';
 
@@ -132,31 +123,6 @@ const recentActivities = [
     target: 'Server upgrade',
     time: '5 hours ago',
     status: 'processing'
-  }
-];
-
-// Upcoming events data
-const upcomingEvents = [
-  {
-    id: 1,
-    title: 'System Maintenance',
-    date: 'Tomorrow, 02:00 AM',
-    type: 'maintenance',
-    duration: '2 hours'
-  },
-  {
-    id: 2,
-    title: 'Quarterly Review',
-    date: 'Sept 28, 10:00 AM',
-    type: 'meeting',
-    duration: '1 hour'
-  },
-  {
-    id: 3,
-    title: 'Software Update',
-    date: 'Sept 30, 03:00 PM',
-    type: 'update',
-    duration: '45 minutes'
   }
 ];
 
@@ -719,7 +685,6 @@ const ActivityTable = ({ data }) => {
 
 // Main Dashboard component
 const Dashboard = () => {
-  const [timeframe, setTimeframe] = useState('weekly');
   const [refreshing, setRefreshing] = useState(false);
   const [detailVisible, setDetailVisible] = useState(false);
   const [selectedKpi, setSelectedKpi] = useState(null);
@@ -738,7 +703,6 @@ const Dashboard = () => {
 
   // Get trend data for charts
   const tatTrend = kpiTrendData.tat || [];
-  const dockProcessingTrend = kpiTrendData.dock_processing || [];
   
   // Generate truck volume data
   const truckVolumeData = [
@@ -767,10 +731,6 @@ const Dashboard = () => {
     documentChecks: 88,
     weightVerification: 90
   };
-
-  // Performance data based on selected timeframe
-  const performanceData = generatePerformanceData();
-  const truckStatusData = generateTruckStatusData();
 
   // Handle refresh
   const handleRefresh = () => {
@@ -845,7 +805,7 @@ const Dashboard = () => {
               <Select 
                 defaultValue="weekly" 
                 style={{ width: 120 }} 
-                onChange={value => setTimeframe(value)}
+                onChange={() => {}}
               >
                 <Option value="daily">Daily</Option>
                 <Option value="weekly">Weekly</Option>

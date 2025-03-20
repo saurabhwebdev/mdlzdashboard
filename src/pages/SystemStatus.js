@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Typography, 
   Card, 
@@ -7,8 +7,6 @@ import {
   Statistic, 
   Progress, 
   Space, 
-  Divider,
-  Timeline,
   Tag,
   Alert,
   Table,
@@ -17,21 +15,14 @@ import {
 } from 'antd';
 import { 
   CheckCircleOutlined, 
-  ClockCircleOutlined, 
   SyncOutlined,
-  WarningOutlined,
-  ArrowUpOutlined,
-  ArrowDownOutlined,
-  CloseCircleOutlined,
   DatabaseOutlined,
-  CloudServerOutlined,
-  ApiOutlined,
-  AreaChartOutlined,
   DesktopOutlined,
   CameraOutlined,
   ReloadOutlined,
   DashboardOutlined,
-  SettingOutlined
+  SettingOutlined,
+  AreaChartOutlined
 } from '@ant-design/icons';
 import { 
   LineChart, 
@@ -40,13 +31,10 @@ import {
   Area, 
   BarChart, 
   Bar, 
-  PieChart, 
-  Pie, 
   XAxis, 
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  Legend, 
   ResponsiveContainer 
 } from 'recharts';
 
@@ -54,6 +42,7 @@ const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 
 // Dummy data for system status
+/* Commented out as unused
 const systemMetrics = {
   serverUptime: 99.98,
   responseTime: 120, // ms
@@ -65,8 +54,10 @@ const systemMetrics = {
   errorRate: 0.02, // percentage
   databaseConnections: 28
 };
+*/
 
 // Dummy system events
+/* Commented out as unused
 const systemEvents = [
   { 
     time: '2023-03-19 14:32:05', 
@@ -99,8 +90,10 @@ const systemEvents = [
     icon: <CheckCircleOutlined /> 
   }
 ];
+*/
 
 // Dummy server data for table
+/* Commented out as unused
 const serverData = [
   {
     key: '1',
@@ -148,8 +141,10 @@ const serverData = [
     region: 'US-Central'
   }
 ];
+*/
 
 // Server status columns
+/* Commented out as unused
 const columns = [
   {
     title: 'Server Name',
@@ -209,6 +204,7 @@ const columns = [
     key: 'region',
   }
 ];
+*/
 
 // Generate realistic historical data for charts
 const generateTimeSeriesData = (dataPoints, baseValue, variance, trend = 0) => {
@@ -376,6 +372,7 @@ const getStatusColor = (status) => {
 };
 
 // Status icon mapping
+/* Commented out as unused
 const getStatusIcon = (status) => {
   switch(status) {
     case 'success': return <CheckCircleOutlined style={{ color: '#52c41a' }} />;
@@ -385,6 +382,7 @@ const getStatusIcon = (status) => {
     default: return <SyncOutlined style={{ color: '#1890ff' }} spin />;
   }
 };
+*/
 
 // Create location data for camera uptime
 const locationData = [

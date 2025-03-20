@@ -8,40 +8,23 @@ import {
   Button, 
   Switch, 
   Space, 
-  Divider,
-  Select,
-  Upload,
-  Table,
   Tag,
   message,
-  Row,
-  Col,
-  Radio,
   Tooltip,
   Alert,
-  Modal,
-  Empty,
-  Descriptions
+  Modal
 } from 'antd';
 import { 
   UserOutlined, 
   BellOutlined, 
   SettingOutlined, 
-  CarOutlined, 
   TeamOutlined,
   CheckCircleOutlined,
-  UploadOutlined,
-  LockOutlined,
-  NotificationOutlined,
-  PlusOutlined,
   DeleteOutlined,
-  InfoCircleOutlined,
   SwapOutlined,
   StopOutlined,
   EditOutlined,
   AuditOutlined,
-  EyeOutlined,
-  CloseCircleOutlined,
   TruckOutlined
 } from '@ant-design/icons';
 
@@ -55,8 +38,10 @@ import AuditSettingsContent from '../components/settings/AuditSettingsContent';
 import ApprovalsSettingsContent from '../components/settings/ApprovalsSettingsContent';
 
 const { Title, Paragraph, Text } = Typography;
+/* Unused constants
 const { TabPane } = Tabs;
 const { Option } = Select;
+*/
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState('1');
@@ -71,7 +56,7 @@ const Settings = () => {
   const [classificationModal, setClassificationModal] = useState({
     visible: false,
     truck: null,
-    reason: '',
+    // reason: '',
   });
   
   // Handle opening the classification change modal
@@ -79,7 +64,7 @@ const Settings = () => {
     setClassificationModal({
       visible: true,
       truck: record,
-      reason: '',
+      // reason: '',
     });
   };
   
@@ -95,13 +80,13 @@ const Settings = () => {
   const handleReasonChange = (e) => {
     setClassificationModal({
       ...classificationModal,
-      reason: e.target.value,
+      // reason: e.target.value,
     });
   };
   
   // Handle changing truck classification between green and orange
   const handleChangeClassification = () => {
-    const { truck, reason } = classificationModal;
+    const { truck } = classificationModal;
     if (!truck) return;
     
     const newClassification = truck.classification === 'green' ? 'orange' : 'green';
@@ -126,8 +111,8 @@ const Settings = () => {
   const [blacklistModal, setBlacklistModal] = useState({
     visible: false,
     item: null,
-    type: '', // 'truck' or 'transporter'
-    reason: '',
+    type: null,
+    // reason: '',
   });
   
   // Handle opening the blacklist modal
@@ -136,7 +121,7 @@ const Settings = () => {
       visible: true,
       item: record,
       type: type,
-      reason: '',
+      // reason: '',
     });
   };
   
@@ -152,13 +137,13 @@ const Settings = () => {
   const handleBlacklistReasonChange = (e) => {
     setBlacklistModal({
       ...blacklistModal,
-      reason: e.target.value,
+      // reason: e.target.value,
     });
   };
   
   // Handle adding/removing item to/from blacklist
   const handleBlacklist = () => {
-    const { item, type, reason } = blacklistModal;
+    const { item, type } = blacklistModal;
     if (!item) return;
     
     const isRemoving = item.blacklisted;
@@ -202,13 +187,13 @@ const Settings = () => {
     { id: 3, name: 'Fast Freight', contact: 'Robert Johnson', phone: '555-9012', status: 'pending', blacklisted: true },
   ]);
   
-  const [users, setUsers] = useState([
+  const [users, /*setUsers*/] = useState([
     { id: 1, name: 'John Doe', email: 'john.doe@example.com', role: 'Admin', status: 'active' },
     { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', role: 'Operator', status: 'active' },
     { id: 3, name: 'Mike Jones', email: 'mike.jones@example.com', role: 'Viewer', status: 'inactive' },
   ]);
 
-  const [alertSettings, setAlertSettings] = useState([
+  const [alertSettings, /*setAlertSettings*/] = useState([
     { id: 1, name: 'TAT Threshold Exceeded', description: 'Alert when TAT exceeds threshold', enabled: true },
     { id: 2, name: 'Document Compliance', description: 'Alert on document compliance issues', enabled: true },
     { id: 3, name: 'System Outage', description: 'Alert on system component failures', enabled: true },

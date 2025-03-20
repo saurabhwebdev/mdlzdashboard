@@ -7,16 +7,11 @@ import {
   Tabs, 
   Space, 
   Badge, 
-  Divider,
   Card,
-  Empty,
-  Avatar
+  Empty
 } from 'antd';
 import { 
   BellOutlined, 
-  CheckCircleOutlined, 
-  WarningOutlined, 
-  InfoCircleOutlined,
   ClockCircleOutlined
 } from '@ant-design/icons';
 

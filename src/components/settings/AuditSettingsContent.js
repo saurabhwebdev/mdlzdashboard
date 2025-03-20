@@ -11,8 +11,7 @@ import {
   Col,
   Radio,
   Table,
-  Tooltip,
-  Badge
+  Tooltip
 } from 'antd';
 import { EyeOutlined, InfoCircleOutlined } from '@ant-design/icons';
 

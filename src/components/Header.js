@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Badge, Tooltip, Typography, Space, Dropdown, Avatar, Button } from 'antd';
+import { Layout, Menu, Badge, Typography, Space, Dropdown, Avatar, Button } from 'antd';
 import { 
   SettingOutlined, 
   UserOutlined, 
   BellOutlined,
   MenuOutlined,
-  DashboardOutlined,
-  BarChartOutlined,
-  TeamOutlined,
-  FileTextOutlined,
-  CarOutlined,
   LogoutOutlined
 } from '@ant-design/icons';
 import { Link, useLocation } from 'react-router-dom';
@@ -18,6 +13,7 @@ import logo from '../logo.svg';
 const { Header } = Layout;
 const { Text } = Typography;
 
+/* Commented out unused component
 // System status indicator component
 const SystemStatusIndicator = () => {
   const [status, setStatus] = useState("success"); // success, warning, error
@@ -37,17 +33,17 @@ const SystemStatusIndicator = () => {
   const getStatusInfo = (status) => {
     switch(status) {
       case 'success':
-        return { color: '#52c41a', message: 'All Systems Operational' };
+        return { message: 'All Systems Operational' };
       case 'warning':
-        return { color: '#faad14', message: 'System Performance Degraded' };
+        return { message: 'System Performance Degraded' };
       case 'error':
-        return { color: '#f5222d', message: 'System Outage Detected' };
+        return { message: 'System Outage Detected' };
       default:
-        return { color: '#52c41a', message: 'All Systems Operational' };
+        return { message: 'All Systems Operational' };
     }
   };
   
-  const { color, message } = getStatusInfo(status);
+  const { message } = getStatusInfo(status);
   
   return (
     <Tooltip title={message} color="#000" overlayClassName="status-tooltip">
@@ -55,6 +51,7 @@ const SystemStatusIndicator = () => {
     </Tooltip>
   );
 };
+*/
 
 const AppHeader = () => {
   const location = useLocation();
