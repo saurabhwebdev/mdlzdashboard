@@ -405,6 +405,8 @@ const KpiDetailModal = ({ visible, kpi, onClose }) => {
           >
             <Descriptions.Item label="Name">{kpi.name}</Descriptions.Item>
             <Descriptions.Item label="ID">{kpi.id}</Descriptions.Item>
+            <Descriptions.Item label="Current Value">{kpi.value}{kpi.suffix}</Descriptions.Item>
+            <Descriptions.Item label="Target Value">{kpi.target}{kpi.suffix}</Descriptions.Item>
             <Descriptions.Item label="Priority Level">{kpi.priority}</Descriptions.Item>
             <Descriptions.Item label="Granularity">{kpi.granularity}</Descriptions.Item>
             <Descriptions.Item label="Category">{kpi.category}</Descriptions.Item>
@@ -428,6 +430,62 @@ const KpiDetailModal = ({ visible, kpi, onClose }) => {
               }
             </Descriptions.Item>
           </Descriptions>
+          
+          <div style={{ marginTop: 24 }}>
+            <Title level={5}>Performance Against Target</Title>
+            {kpi.target && (
+              <Card bordered={false} style={{ marginBottom: 16 }}>
+                <Row gutter={16} align="middle">
+                  <Col span={8}>
+                    <Statistic
+                      title="Current"
+                      value={kpi.value}
+                      suffix={kpi.suffix}
+                      valueStyle={{ 
+                        color: kpi.status === 'success' ? '#52c41a' : 
+                                kpi.status === 'warning' ? '#faad14' : '#f5222d'
+                      }}
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <Statistic
+                      title="Target"
+                      value={kpi.target}
+                      suffix={kpi.suffix}
+                      valueStyle={{ color: '#1890ff' }}
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <Statistic
+                      title="Variance"
+                      value={kpi.suffix && kpi.suffix.includes('min') ? 
+                        (kpi.value - kpi.target).toFixed(1) : 
+                        (((kpi.value - kpi.target) / kpi.target) * 100).toFixed(1)}
+                      suffix={kpi.suffix && kpi.suffix.includes('min') ? kpi.suffix : '%'}
+                      valueStyle={{ 
+                        color: kpi.status === 'success' ? '#52c41a' : 
+                                kpi.status === 'warning' ? '#faad14' : '#f5222d'
+                      }}
+                      prefix={kpi.value > kpi.target ? 
+                        (kpi.suffix && kpi.suffix.includes('min') ? '+' : 
+                         (!kpi.suffix || !kpi.suffix.includes('%')) ? '+' : '') : ''}
+                    />
+                  </Col>
+                </Row>
+                <div style={{ marginTop: 16 }}>
+                  <Progress 
+                    percent={kpi.suffix && kpi.suffix.includes('min') ? 
+                      Math.min(100, Math.round((kpi.target / kpi.value) * 100)) : 
+                      Math.min(100, Math.round((kpi.value / kpi.target) * 100))}
+                    status={
+                      kpi.status === 'success' ? 'success' : 
+                      kpi.status === 'warning' ? 'warning' : 'exception'
+                    }
+                  />
+                </div>
+              </Card>
+            )}
+          </div>
           
           <div style={{ marginTop: 24 }}>
             <Title level={5}>Threshold Values</Title>
@@ -547,6 +605,21 @@ const KpiCard = ({ title, value, suffix, prefix, status, trend, description, kpi
     return null;
   };
 
+  // Calculate progress percentage against target if available
+  const getProgressPercentage = () => {
+    if (!kpi || !kpi.target) return null;
+    
+    // For metrics where lower is better (time-based), invert the percentage
+    if (kpi.suffix && kpi.suffix.includes('min')) {
+      return Math.min(100, Math.round((kpi.target / value) * 100));
+    }
+    
+    // For metrics where higher is better
+    return Math.min(100, Math.round((value / kpi.target) * 100));
+  };
+
+  const progressPercentage = getProgressPercentage();
+
   return (
     <Card 
       className="dashboard-kpi-card" 
@@ -577,6 +650,24 @@ const KpiCard = ({ title, value, suffix, prefix, status, trend, description, kpi
             }}
           />
         </div>
+        {kpi && kpi.target && (
+          <div className="kpi-target">
+            <Text type="secondary">Target: {kpi.target}{suffix}</Text>
+            {progressPercentage && (
+              <Progress 
+                percent={progressPercentage} 
+                size="small" 
+                status={
+                  status === 'success' ? 'success' : 
+                  status === 'warning' ? 'warning' : 
+                  'exception'
+                }
+                strokeWidth={4}
+                style={{ marginTop: 4 }}
+              />
+            )}
+          </div>
+        )}
         {trend !== undefined && (
           <div className="kpi-secondary-value">
             <Space>
@@ -754,6 +845,12 @@ const Dashboard = () => {
       render: (value, record) => `${value}${record.suffix}`
     },
     {
+      title: 'Target',
+      dataIndex: 'target',
+      key: 'target',
+      render: (target, record) => target ? `${target}${record.suffix}` : 'N/A'
+    },
+    {
       title: 'Trend',
       dataIndex: 'trend',
       key: 'trend',
@@ -777,6 +874,36 @@ const Dashboard = () => {
           error: { color: 'error', text: 'Critical' }
         };
         return <Tag color={statusMap[status].color}>{statusMap[status].text}</Tag>;
+      }
+    },
+    {
+      title: 'Progress',
+      key: 'progress',
+      render: (_, record) => {
+        if (!record.target) return null;
+        
+        // For metrics where lower is better (time-based), invert the percentage
+        let percent;
+        if (record.suffix && record.suffix.includes('min')) {
+          percent = Math.min(100, Math.round((record.target / record.value) * 100));
+        } else {
+          // For metrics where higher is better
+          percent = Math.min(100, Math.round((record.value / record.target) * 100));
+        }
+        
+        return (
+          <Progress 
+            percent={percent} 
+            size="small" 
+            status={
+              record.status === 'success' ? 'success' : 
+              record.status === 'warning' ? 'warning' : 
+              'exception'
+            }
+            strokeWidth={5}
+            style={{ width: 80 }}
+          />
+        );
       }
     }
   ];
@@ -912,6 +1039,44 @@ const Dashboard = () => {
                   strokeWidth={3}
                   name="TAT" 
                 />
+                {tatKpi && tatKpi.target && (
+                  <RechartsTooltip.Cursor stroke="#8a4fff" />
+                )}
+                {tatKpi && tatKpi.target && (
+                  <RechartsTooltip formatter={(value) => [`${value} min`, 'Target']} />
+                )}
+                {tatKpi && tatKpi.target && (
+                  <svg>
+                    <defs>
+                      <linearGradient id="targetGradient" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="#ff4d4f" stopOpacity={0.7} />
+                        <stop offset="100%" stopColor="#ff4d4f" stopOpacity={0.7} />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                )}
+                {tatKpi && tatKpi.target && (
+                  <svg height="250">
+                    <line 
+                      x1="0%" 
+                      y1={`${(1 - tatKpi.target / 150) * 250}px`} 
+                      x2="100%" 
+                      y2={`${(1 - tatKpi.target / 150) * 250}px`} 
+                      stroke="url(#targetGradient)" 
+                      strokeWidth="2" 
+                      strokeDasharray="5 5" 
+                    />
+                    <text 
+                      x="95%" 
+                      y={`${(1 - tatKpi.target / 150) * 250 - 5}px`} 
+                      fill="#ff4d4f" 
+                      textAnchor="end" 
+                      fontSize="12"
+                    >
+                      Target: {tatKpi.target} min
+                    </text>
+                  </svg>
+                )}
               </LineChart>
             </ResponsiveContainer>
           </ChartCard>
@@ -965,7 +1130,29 @@ const Dashboard = () => {
                   dataKey="time" 
                   fill="#8a4fff" 
                   radius={[0, 4, 4, 0]}
-                  label={{ position: 'right', formatter: (value) => `${value} min` }}
+                  label={(props) => {
+                    const { x, y, width, value, index } = props;
+                    const item = processingTimeData[index];
+                    const targetKpi = kpiData.find(k => {
+                      if (item.name === 'Green Channel') return k.id === 'green_channel';
+                      if (item.name === 'Non-Green Channel') return k.id === 'non_green_channel';
+                      if (item.name === 'Dock Processing') return k.id === 'dock_processing';
+                      if (item.name === 'Exit Processing') return k.id === 'exit_processing';
+                      return false;
+                    });
+                    return (
+                      <g>
+                        <text x={x + width + 5} y={y + 4} textAnchor="start" fill="#666">
+                          {value} min
+                        </text>
+                        {targetKpi && targetKpi.target && (
+                          <text x={x + width + 5} y={y + 20} textAnchor="start" fill="#ff4d4f" fontSize={11}>
+                            Target: {targetKpi.target} min
+                          </text>
+                        )}
+                      </g>
+                    );
+                  }}
                 />
               </BarChart>
             </ResponsiveContainer>
